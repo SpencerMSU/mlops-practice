@@ -1,0 +1,38 @@
+schema: '2.0'
+stages:
+  prepare:
+    cmd: python src/prepare.py
+    deps:
+    - path: src/prepare.py
+      hash: md5
+      md5: 0d3c21e677ebe2036464f95116c69775
+      size: 370
+    outs:
+    - path: data/iris.csv
+      hash: md5
+      md5: 21d441a28bce4417276097df955afc50
+      size: 2928
+  train:
+    cmd: python src/train.py
+    deps:
+    - path: data/iris.csv
+      hash: md5
+      md5: 21d441a28bce4417276097df955afc50
+      size: 2928
+    - path: src/train.py
+      hash: md5
+      md5: f83158b04010a6b0fae8472de4ad0e03
+      size: 1240
+    params:
+      params.yaml:
+        train.max_depth: 1
+        train.n_estimators: 1
+    outs:
+    - path: metrics.json
+      hash: md5
+      md5: cc447a6d64103643ebeb25e433700c7a
+      size: 17
+    - path: models/model.pkl
+      hash: md5
+      md5: e29a8e3546525c862ac017320de74b5e
+      size: 2433

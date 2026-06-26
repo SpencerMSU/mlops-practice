@@ -1,8 +1,9 @@
 import os
 import yaml
 import joblib
+import json
+import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.datasets import load_iris
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 
@@ -13,9 +14,12 @@ def train_model():
     with open(os.path.join(BASE_DIR, "..", "params.yaml"), "r") as f:
         params = yaml.safe_load(f)["train"]
 
-    data = load_iris()
+    df = pd.read_csv(os.path.join(BASE_DIR, "..", "data", "iris.csv"))
+    X = df.drop("target", axis=1)
+    y = df["target"]
+
     X_train, X_test, y_train, y_test = train_test_split(
-        data.data, data.target, test_size=0.2, random_state=42
+        X, y, test_size=0.2, random_state=42
     )
 
     model = RandomForestClassifier(
@@ -27,9 +31,13 @@ def train_model():
 
     predictions = model.predict(X_test)
     acc = accuracy_score(y_test, predictions)
-    print("Accuracy:", acc)
+
+    metrics_path = os.path.join(BASE_DIR, "..", "metrics.json")
+    with open(metrics_path, "w") as f:
+        json.dump({"accuracy": acc}, f)
 
     joblib.dump(model, os.path.join(BASE_DIR, "..", "models", "model.pkl"))
+    print(f"Модель обучена. Accuracy: {acc}")
 
 
 if __name__ == "__main__":
