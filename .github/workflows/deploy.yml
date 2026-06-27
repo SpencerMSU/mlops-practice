@@ -29,7 +29,8 @@ jobs:
           git config --global user.name "GitHub CD Bot"
           git clone https://$HF_USER:$HF_TOKEN@huggingface.co/spaces/$HF_USER/$SPACE_NAME space_repo
           cp -r src/ space_repo/src/
-          cp -r models/ space_repo/models/
+          mkdir -p space_repo/models
+          cp models/model.pkl space_repo/models/model.pkl
           cp requirements.txt space_repo/requirements.txt
           cp Dockerfile space_repo/Dockerfile
           find space_repo -name "mlflow.db" -type f -delete
