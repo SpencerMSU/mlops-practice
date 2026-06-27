@@ -3,3 +3,6 @@ pyyaml
 joblib
 pre-commit
 ruff
+pandas
+numpy
+mlflow
